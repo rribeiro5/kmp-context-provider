@@ -6,6 +6,10 @@ android-compileSdk = "37"
 android-minSdk = "23"
 
 detekt = "2.0.0-alpha.6"
+startup = "1.2.0"
+robolectric = "4.17"
+mockk = "1.14.11"
+androidx-test-core = "1.7.0"
 
 kotlin = "2.4.21"
 agp = "9.1.1"
@@ -14,6 +18,10 @@ maven-publish = "0.37.0"
 [libraries]
 
 detekt-formatting = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
+startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidx-test-core" }
 
 [plugins]
 
