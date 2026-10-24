@@ -30,6 +30,7 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.startup)
         }
         commonMain.dependencies {
         }
