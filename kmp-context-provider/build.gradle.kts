@@ -32,6 +32,12 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.startup)
         }
+        getByName("androidHostTest").dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.robolectric)
+            implementation(libs.mockk)
+            implementation(libs.androidx.test.core)
+        }
     }
 }
 
