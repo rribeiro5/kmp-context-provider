@@ -32,12 +32,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.startup)
         }
-        commonMain.dependencies {
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-        }
     }
 }
 
