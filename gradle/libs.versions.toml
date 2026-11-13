@@ -8,7 +8,7 @@ android-minSdk = "23"
 detekt = "2.0.0-alpha.6"
 startup = "1.2.0"
 robolectric = "4.17"
-mockk = "1.14.11"
+mockk = "1.14.12"
 androidx-test-core = "1.7.0"
 
 kotlin = "2.4.21"
