@@ -21,7 +21,5 @@ internal class CurrentActivityLifecycleCallbacks : Application.ActivityLifecycle
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
 
-    override fun onActivityDestroyed(activity: Activity) {
-        ContextProvider.clearActivity(activity)
-    }
+    override fun onActivityDestroyed(activity: Activity) = Unit
 }

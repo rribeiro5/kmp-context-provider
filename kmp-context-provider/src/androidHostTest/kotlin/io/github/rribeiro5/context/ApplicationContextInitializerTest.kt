@@ -8,8 +8,6 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.Runs
 import io.mockk.verify
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -18,30 +16,13 @@ import kotlin.test.assertTrue
 @OptIn(InternalContextProviderApi::class)
 class ApplicationContextInitializerTest {
 
-    @BeforeTest
-    @AfterTest
-    fun resetState() {
-        ContextProvider::class.java.getDeclaredField("_applicationContext").apply {
-            isAccessible = true
-            this[ContextProvider] = null
-        }
-        ContextProvider::class.java.getDeclaredField("_activityReference").apply {
-            isAccessible = true
-            this[ContextProvider] = null
-        }
-        ContextProvider::class.java.getDeclaredField("registeredApplication").apply {
-            isAccessible = true
-            this[ContextProvider] = null
-        }
-    }
-
     @Test
     fun testCreateInitializesContextProviderAndReturnsContext() {
         mockkObject(ContextProvider) {
             val mockContext = mockk<Context>()
             val mockApplication = mockk<Application>()
             every { mockContext.applicationContext } returns mockApplication
-            every { mockApplication.registerActivityLifecycleCallbacks(any()) } just Runs
+            every { ContextProvider.initApplicationContext(any()) } just Runs
 
             val initializer = ApplicationContextInitializer()
             val resultContext = initializer.create(mockContext)

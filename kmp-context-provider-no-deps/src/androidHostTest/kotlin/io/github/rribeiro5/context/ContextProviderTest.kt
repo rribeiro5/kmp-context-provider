@@ -67,17 +67,10 @@ class ContextProviderTest {
         assertSame(firstActivity, ContextProvider.activityContext)
 
         lifecycleCallbacks.onActivityPaused(secondActivity)
-        lifecycleCallbacks.onActivityDestroyed(secondActivity)
 
         assertSame(firstActivity, ContextProvider.activity)
 
         lifecycleCallbacks.onActivityPaused(firstActivity)
-
-        assertNull(ContextProvider.activity)
-        assertNull(ContextProvider.activityContext)
-
-        lifecycleCallbacks.onActivityResumed(secondActivity)
-        lifecycleCallbacks.onActivityDestroyed(secondActivity)
 
         assertNull(ContextProvider.activity)
         assertNull(ContextProvider.activityContext)
@@ -88,11 +81,7 @@ class ContextProviderTest {
             isAccessible = true
             this[ContextProvider] = null
         }
-        ContextProvider::class.java.getDeclaredField("_activityReference").apply {
-            isAccessible = true
-            this[ContextProvider] = null
-        }
-        ContextProvider::class.java.getDeclaredField("registeredApplication").apply {
+        ContextProvider::class.java.getDeclaredField("_activity").apply {
             isAccessible = true
             this[ContextProvider] = null
         }

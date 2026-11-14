@@ -7,9 +7,7 @@ import java.lang.ref.WeakReference
 
 public object ContextProvider {
     private lateinit var _applicationContext: Context
-    private var _activityReference: WeakReference<Activity>? = null
-    private val activityLifecycleCallbacks = CurrentActivityLifecycleCallbacks()
-    private var registeredApplication: Application? = null
+    private var _activity: WeakReference<Activity>? = null
 
     @JvmStatic
     public val applicationContext: Context
@@ -24,7 +22,7 @@ public object ContextProvider {
 
     @JvmStatic
     public val activity: Activity?
-        get() = _activityReference?.get()
+        get() = _activity?.get()
 
     @JvmStatic
     public val activityContext: Context?
@@ -32,22 +30,16 @@ public object ContextProvider {
 
     internal fun initApplicationContext(context: Context) {
         _applicationContext = context
-
-        val application = context as Application
-        if (registeredApplication !== application) {
-            registeredApplication?.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks)
-            application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
-            registeredApplication = application
-        }
+        application.registerActivityLifecycleCallbacks(CurrentActivityLifecycleCallbacks())
     }
 
     internal fun setActivity(activity: Activity) {
-        _activityReference = WeakReference(activity)
+        _activity = WeakReference(activity)
     }
 
     internal fun clearActivity(activity: Activity) {
-        if (_activityReference?.get() === activity) {
-            _activityReference = null
+        if (_activity?.get() === activity) {
+            _activity = null
         }
     }
 }
