@@ -5,9 +5,10 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 
-public class ApplicationContextProvider : ContentProvider() {
+@InternalContextProviderApi
+public class ApplicationContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
-        ContextProvider.initApplicationContext(requireNotNull(context).applicationContext)
+        context?.applicationContext?.let(ContextProvider::initApplicationContext)
         return true
     }
 

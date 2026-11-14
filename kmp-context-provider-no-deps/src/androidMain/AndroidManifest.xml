@@ -2,7 +2,7 @@
 
     <application>
         <provider
-            android:name="io.github.rribeiro5.context.ApplicationContextProvider"
+            android:name="io.github.rribeiro5.context.ApplicationContentProvider"
             android:authorities="${applicationId}.kmp-context-provider-no-deps"
             android:exported="false" />
     </application>

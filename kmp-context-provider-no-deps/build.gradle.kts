@@ -19,7 +19,7 @@ kotlin {
     explicitApi = ExplicitApiMode.Strict
 
     android {
-        namespace = "io.github.rribeiro5.context.nodeps"
+        namespace = "io.github.rribeiro5.context"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         androidResources.enable = true

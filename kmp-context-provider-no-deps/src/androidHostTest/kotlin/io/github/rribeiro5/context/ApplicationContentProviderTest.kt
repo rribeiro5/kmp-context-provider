@@ -15,7 +15,8 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
-class ApplicationContextProviderTest {
+@OptIn(InternalContextProviderApi::class)
+class ApplicationContentProviderTest {
 
     @BeforeTest
     @AfterTest
@@ -26,7 +27,7 @@ class ApplicationContextProviderTest {
     @Test
     fun testOnCreateInitializesContextProvider() {
         val application = ApplicationProvider.getApplicationContext<android.app.Application>()
-        val provider = ContentProviderController.of(ApplicationContextProvider()).create().get()
+        val provider = ContentProviderController.of(ApplicationContentProvider()).create().get()
 
         assertSame(application, ContextProvider.applicationContext)
         assertSame(application, ContextProvider.application)
@@ -35,7 +36,7 @@ class ApplicationContextProviderTest {
 
     @Test
     fun testCrudMethodsAreNoOps() {
-        val provider = ApplicationContextProvider()
+        val provider = ApplicationContentProvider()
         val uri = Uri.parse("content://test/path")
         val values = ContentValues()
 
