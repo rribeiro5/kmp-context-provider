@@ -30,3 +30,4 @@ dependencyResolutionManagement {
 }
 
 include(":kmp-context-provider")
+include(":kmp-context-provider-no-deps")
