@@ -3,11 +3,11 @@ package io.github.rribeiro5.context
 import android.app.Application
 import android.content.Context
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.Runs
 import io.mockk.verify
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -22,6 +22,7 @@ class ApplicationContextInitializerTest {
             val mockContext = mockk<Context>()
             val mockApplication = mockk<Application>()
             every { mockContext.applicationContext } returns mockApplication
+            every { ContextProvider.initApplicationContext(any()) } just Runs
 
             val initializer = ApplicationContextInitializer()
             val resultContext = initializer.create(mockContext)
