@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="io.github.rribeiro5.context.FirstTestActivity"
+            android:exported="false" />
+        <activity
+            android:name="io.github.rribeiro5.context.SecondTestActivity"
+            android:exported="false" />
+    </application>
+</manifest>
