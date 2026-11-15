@@ -10,6 +10,7 @@ startup = "1.2.0"
 robolectric = "4.17"
 mockk = "1.14.12"
 androidx-test-core = "1.7.0"
+androidx-test-runner = "1.7.0"
 
 kotlin = "2.4.21"
 agp = "9.5.1"
@@ -22,6 +23,7 @@ startup = { module = "androidx.startup:startup-runtime", version.ref = "startup"
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidx-test-core" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
 
 [plugins]
 

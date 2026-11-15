@@ -25,6 +25,9 @@ kotlin {
         androidResources.enable = true
         compilerOptions { jvmTarget = JvmTarget.JVM_17 }
         withHostTest {}
+        withDeviceTest {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
 
     sourceSets {
@@ -33,6 +36,11 @@ kotlin {
             implementation(libs.robolectric)
             implementation(libs.mockk)
             implementation(libs.androidx.test.core)
+        }
+        getByName("androidDeviceTest").dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.androidx.test.core)
+            implementation(libs.androidx.test.runner)
         }
     }
 }
