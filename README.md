@@ -1,6 +1,6 @@
 # kmp-context-provider
 
-[![CI](https://img.shields.io/github/actions/workflow/status/rribeiro5/kmp-context-provider/ci.yml?branch=main&label=CI)](https://github.com/rribeiro5/kmp-context-provider/actions/workflows/ci.yml)
+[![CI](https://github.com/rribeiro5/kmp-context-provider/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/rribeiro5/kmp-context-provider/actions/workflows/ci.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.rribeiro5/kmp-context-provider)](https://central.sonatype.com/artifact/io.github.rribeiro5/kmp-context-provider)
 [![API Reference](https://img.shields.io/badge/API_Reference-Dokka-blue)](https://rribeiro5.github.io/kmp-context-provider/)
 [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
