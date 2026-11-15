@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.kmp.library)
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
 }
 
 detekt {

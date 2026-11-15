@@ -36,8 +36,20 @@ jobs:
       - name: Build Project
         run: ./gradlew assemble
 
-      - name: Run Tests
-        run: ./gradlew check
+      - name: Run Tests and Coverage
+        run: ./gradlew check koverHtmlReport
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-report
+          path: kmp-context-provider/build/reports/kover/html
+
+      - name: Upload Coverage Report (no-deps)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-report-no-deps
+          path: kmp-context-provider-no-deps/build/reports/kover/html
 
   integration-test:
     name: Integration Tests
