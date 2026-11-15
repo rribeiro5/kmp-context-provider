@@ -7,6 +7,12 @@ plugins {
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kover)
+    alias(libs.plugins.dokka)
+}
+
+dokka {
+    moduleName.set("kmp-context-provider-no-deps")
+    moduleVersion.set(libs.versions.lib.version.get())
 }
 
 detekt {
