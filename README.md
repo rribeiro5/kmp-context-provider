@@ -34,6 +34,21 @@ kmp-context-provider = { module = "io.github.rribeiro5:kmp-context-provider", ve
 ```
 
 #### Gradle (`build.gradle.kts`)
+
+##### Kotlin Multiplatform (KMP) Module
+```kotlin
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.kmp.context.provider)
+            // Or without version catalog:
+            // implementation("io.github.rribeiro5:kmp-context-provider:<latest-version>")
+        }
+    }
+}
+```
+
+##### Android-Only Module
 ```kotlin
 dependencies {
     implementation(libs.kmp.context.provider)
@@ -98,6 +113,18 @@ If your project does not use AndroidX App Startup (`androidx.startup:startup-run
 
 ### Gradle Setup
 
+#### Kotlin Multiplatform (KMP) Module
+```kotlin
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            implementation("io.github.rribeiro5:kmp-context-provider-no-deps:<latest-version>")
+        }
+    }
+}
+```
+
+#### Android-Only Module
 ```kotlin
 dependencies {
     implementation("io.github.rribeiro5:kmp-context-provider-no-deps:<latest-version>")
