@@ -10,6 +10,9 @@ plugins {
 dokka {
     moduleName.set("kmp-context-provider")
     moduleVersion.set(libs.versions.lib.version.get())
+    dokkaPublications.configureEach {
+        includes.from(file("MODULE.md"))
+    }
 }
 
 dependencies {

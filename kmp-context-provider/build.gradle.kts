@@ -13,6 +13,9 @@ plugins {
 dokka {
     moduleName.set("kmp-context-provider")
     moduleVersion.set(libs.versions.lib.version.get())
+    dokkaSourceSets.configureEach {
+        includes.from(file("MODULE.md"))
+    }
 }
 
 detekt {
