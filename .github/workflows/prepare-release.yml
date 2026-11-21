@@ -70,12 +70,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${{ inputs.version }}"
-          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          BASE_BRANCH="${{ github.ref_name }}"
           gh release create "v${VERSION}" \
             --draft \
             --title "v${VERSION}" \
             --generate-notes \
-            --target "$BRANCH_NAME"
+            --target "$BASE_BRANCH"
 
       - name: Create Pull Request
         env:
@@ -86,7 +86,7 @@ jobs:
           BASE_BRANCH="${{ github.ref_name }}"
           ACTOR="${{ github.actor }}"
 
-          PR_BODY=$(printf "Automated release PR for version **v%s**.\n\nTo finalize and publish this release, execute the **Publish Release** workflow on branch \`%s\`.\n\n*Triggered by @%s*" "$VERSION" "$BRANCH_NAME" "$ACTOR")
+          PR_BODY=$(printf "Automated release PR for version **v%s**.\n\nTo finalize and publish this release, **approve** the PR and execute the **Publish Release** workflow on branch \`%s\`.\n\n*Triggered by @%s*" "$VERSION" "$BRANCH_NAME" "$ACTOR")
 
           gh pr create \
             --base "$BASE_BRANCH" \
