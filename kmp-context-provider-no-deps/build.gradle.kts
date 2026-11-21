@@ -62,12 +62,12 @@ kotlin {
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
-    coordinates("io.github.rribeiro5", "kmp-context-provider-no-deps", "1.0.0")
+    coordinates("io.github.rribeiro5", "kmp-context-provider-no-deps", libs.versions.lib.version.get())
 
     pom {
         name = "kmp-context-provider-no-deps"
-        description = "Kotlin Multiplatform library"
-        url = "github url" //todo
+        description = "Lightweight library that automatically provides Android Context across Kotlin Multiplatform and Android projects without manual context passing — without transitive dependencies"
+        url = "https://rribeiro5.github.io/kmp-context-provider/"
 
         licenses {
             license {
@@ -78,14 +78,14 @@ mavenPublishing {
 
         developers {
             developer {
-                id = "" //todo github nickname
-                name = "" //todo full name
-                email = "" //todo email
+                id = "rribeiro5"
+                name = "Rafael Ribeiro"
+                email = "rribeiro5.dev@proton.me"
             }
         }
 
         scm {
-            url = "github url" //todo
+            url = "https://github.com/rribeiro5/kmp-context-provider"
         }
     }
 }
