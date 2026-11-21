@@ -1,0 +1,107 @@
+name: Publish Release
+run-name: Publish Release ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+jobs:
+  validate:
+    name: Validate Release Setup
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+      pr_number: ${{ steps.validate.outputs.pr_number }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Release Branch and Open PR
+        id: validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REF="${{ github.ref_name }}"
+          if [[ ! "$REF" =~ ^release/ ]]; then
+            echo "::error::Publish Release workflow must be run from a release/* branch. Current branch: '$REF'"
+            exit 1
+          fi
+
+          VERSION="${REF#release/}"
+          echo "Publishing release version: $VERSION"
+
+          PR_NUMBER=$(gh pr list --head "$REF" --label "release" --state open --json number --jq '.[0].number')
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" == "null" ]; then
+            echo "::error::No open pull request with label 'release' found for branch $REF"
+            exit 1
+          fi
+
+          echo "Found open release PR #$PR_NUMBER for branch $REF"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+  publish-maven:
+    name: Publish to Maven Central
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Publish to Maven Central
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
+        run: ./gradlew publishAndReleaseToMavenCentral --no-parallel --max-workers=1 --no-configuration-cache
+
+  publish-docs:
+    name: Publish Documentation
+    needs: publish-maven
+    uses: ./.github/workflows/publish-docs.yml
+
+  finalize-release:
+    name: Finalize Release (Merge PR & Publish Release)
+    needs: [validate, publish-maven, publish-docs]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge Release PR and Publish Draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.validate.outputs.version }}
+          PR_NUMBER: ${{ needs.validate.outputs.pr_number }}
+        run: |
+          # Squash merge PR and delete the release branch
+          gh pr merge "$PR_NUMBER" --squash --delete-branch
+
+          # Publish the Draft GitHub Release
+          gh release edit "v${VERSION}" --draft=false

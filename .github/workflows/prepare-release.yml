@@ -1,0 +1,97 @@
+name: Prepare Release
+run-name: Prepare Release v${{ inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.0.1)'
+        required: true
+        type: string
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Validate Version format (SemVer)
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+            echo "::error::Invalid SemVer version format: '$VERSION'. Must follow X.Y.Z or X.Y.Z-suffix (e.g., 1.0.0, 1.0.0-rc.1)."
+            exit 1
+          fi
+          echo "Version '$VERSION' is valid SemVer."
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create release branch
+        id: branch
+        run: |
+          VERSION="${{ inputs.version }}"
+          BRANCH_NAME="release/${VERSION}"
+          git checkout -b "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Update version in Version Catalog
+        run: |
+          VERSION="${{ inputs.version }}"
+          sed -i "s/^lib-version = \".*\"/lib-version = \"$VERSION\"/" gradle/libs.versions.toml
+
+          if ! grep -q "lib-version = \"$VERSION\"" gradle/libs.versions.toml; then
+            echo "::error::Failed to update lib-version in gradle/libs.versions.toml"
+            exit 1
+          fi
+
+      - name: Commit and push release branch
+        run: |
+          VERSION="${{ inputs.version }}"
+          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          git add gradle/libs.versions.toml
+          git commit -m "release: prepare release v${VERSION}"
+          git push origin "$BRANCH_NAME" --force
+
+      - name: Create Draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          gh release create "v${VERSION}" \
+            --draft \
+            --title "v${VERSION}" \
+            --generate-notes \
+            --target "$BRANCH_NAME"
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          BASE_BRANCH="${{ github.ref_name }}"
+          ACTOR="${{ github.actor }}"
+
+          PR_BODY=$(printf "Automated release PR for version **v%s**.\n\nTo finalize and publish this release, execute the **Publish Release** workflow on branch \`%s\`.\n\n*Triggered by @%s*" "$VERSION" "$BRANCH_NAME" "$ACTOR")
+
+          gh pr create \
+            --base "$BASE_BRANCH" \
+            --head "$BRANCH_NAME" \
+            --title "Release v${VERSION}" \
+            --body "$PR_BODY" \
+            --label "release" \
+            --assignee "$ACTOR"
