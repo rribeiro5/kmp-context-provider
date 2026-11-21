@@ -25,6 +25,10 @@ detekt {
     source.setFrom(files("src"))
 }
 
+dependencies {
+    detektPlugins(libs.detekt.formatting)
+}
+
 kotlin {
     explicitApi = ExplicitApiMode.Strict
 
