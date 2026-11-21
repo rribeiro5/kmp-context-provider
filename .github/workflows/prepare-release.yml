@@ -70,12 +70,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${{ inputs.version }}"
-          BRANCH_NAME="${{ steps.branch.outputs.branch_name }}"
+          BASE_BRANCH="${{ github.ref_name }}"
           gh release create "v${VERSION}" \
             --draft \
             --title "v${VERSION}" \
             --generate-notes \
-            --target "$BRANCH_NAME"
+            --target "$BASE_BRANCH"
 
       - name: Create Pull Request
         env:
