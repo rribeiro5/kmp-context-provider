@@ -25,6 +25,10 @@ detekt {
     source.setFrom(files("src"))
 }
 
+dependencies {
+    detektPlugins(libs.detekt.formatting)
+}
+
 kotlin {
     explicitApi = ExplicitApiMode.Strict
 
@@ -47,14 +51,14 @@ kotlin {
         }
         getByName("androidHostTest").dependencies {
             implementation(kotlin("test"))
-            implementation(libs.robolectric)
-            implementation(libs.mockk)
-            implementation(libs.androidx.test.core)
+            implementation(libs.test.robolectric)
+            implementation(libs.test.mockk)
+            implementation(libs.test.androidx.core)
         }
         getByName("androidDeviceTest").dependencies {
             implementation(kotlin("test"))
-            implementation(libs.androidx.test.core)
-            implementation(libs.androidx.test.runner)
+            implementation(libs.test.androidx.core)
+            implementation(libs.test.androidx.runner)
         }
     }
 }
