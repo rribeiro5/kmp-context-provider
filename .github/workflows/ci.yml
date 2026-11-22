@@ -71,7 +71,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Samples
-        run: ./gradlew :samples:lib:assemble :samples:app:assemble
+        run: ./gradlew :samples:lib:assemble :samples:app:assemble -PincludeSamples=true
 
   integration-test:
     name: Integration Tests
