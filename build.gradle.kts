@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.detekt).apply(false)
     alias(libs.plugins.kover).apply(false)
     alias(libs.plugins.dokka)
+    // Samples
+    alias(libs.plugins.android.app).apply(false)
 }
 
 dokka {

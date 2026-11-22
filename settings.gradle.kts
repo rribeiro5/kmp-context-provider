@@ -31,3 +31,13 @@ dependencyResolutionManagement {
 
 include(":kmp-context-provider")
 include(":kmp-context-provider-no-deps")
+
+val includeSamples = providers.gradleProperty("includeSamples").orNull == "true"
+    || System.getProperty("idea.active") == "true"
+
+if (includeSamples) {
+    include(":samples:lib")
+    include(":samples:app")
+}
+
+
