@@ -17,7 +17,7 @@ kover = "0.9.11"
 dokka = "2.3.0"
 
 kotlin = "2.4.21"
-agp = "9.5.1"
+agp = "9.5.3"
 maven-publish = "0.37.0"
 
 [libraries]
